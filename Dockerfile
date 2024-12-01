@@ -2,10 +2,10 @@
 FROM mcr.microsoft.com/playwright/python:v1.38.0-focal
 
 # 设置工作目录为 /app
-WORKDIR /app
+WORKDIR /Signin_auto
 
 # 复制代码到容器
-COPY . /app
+COPY . /Signin_auto
 
 # 安装依赖
 RUN pip install -r requirements.txt
