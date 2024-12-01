@@ -4,14 +4,14 @@ FROM mcr.microsoft.com/playwright/python:v1.38.0-focal
 # 设置工作目录为 /app
 WORKDIR /app
 
-# 将本地代码复制到容器中
+# 复制代码到容器
 COPY . /app
 
-# 安装 Python 依赖
+# 安装依赖
 RUN pip install -r requirements.txt
 
-# 确保 Playwright 的浏览器已安装
+# 安装 Playwright 浏览器
 RUN playwright install
 
-# 设置默认启动命令，运行你的主程序
-CMD ["python", "Signin_auto.py"]
+# 设置默认启动命令，使用 gunicorn 启动
+CMD ["gunicorn", "Signing_auto:app"]
