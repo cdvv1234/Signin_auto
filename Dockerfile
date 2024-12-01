@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 RUN playwright install
 
 # 设置默认启动命令，使用 gunicorn 启动
-CMD ["gunicorn", "Signing_auto:app"]
+CMD ["gunicorn", "Signin_auto:app"]
