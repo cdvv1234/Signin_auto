@@ -34,6 +34,15 @@ RUN pip install -r requirements.txt
 RUN npm install playwright && \
     npx playwright install chromium
 
+# 处理 Playwright 缓存
+RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
+    echo "...Copying Playwright Cache from Build Cache" && \
+    cp -R $XDG_CACHE_HOME/playwright/ $PLAYWRIGHT_BROWSERS_PATH; \
+    else \
+    echo "...Storing Playwright Cache in Build Cache" && \
+    cp -R $PLAYWRIGHT_BROWSERS_PATH $XDG_CACHE_HOME; \
+    fi
+
 # 拷贝项目文件到容器中
 COPY . .
 
