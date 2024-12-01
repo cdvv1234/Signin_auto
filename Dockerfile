@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 RUN playwright install
 
 # 设置默认启动命令，运行你的主程序
-CMD ["python", "your_script.py"]
+CMD ["python", "Signin_auto.py"]
