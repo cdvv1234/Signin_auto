@@ -19,7 +19,11 @@ RUN apt-get update -q && \
         libcups2 \
         libxkbcommon0 \
         libatspi2.0-0 \
-        libnss3
+        libnss3 \
+        curl \
+        gnupg \
+        lsb-release \
+        yarn # 安装 yarn
 
 # 复制 requirements.txt 文件并安装 Python 依赖
 COPY requirements.txt .
@@ -27,7 +31,19 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # 安装 Playwright 所需的 Chromium 浏览器
-RUN playwright install chromium
+RUN yarn playwright install chromium
+
+# 设置 Playwright 浏览器缓存路径为 /opt/render/project/playwright
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright
+
+# 确保 Playwright 安装了 Chromium，如果缓存不存在则下载并保存缓存
+RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
+    echo "...Storing Playwright Cache in Build Cache" && \
+    cp -R $PLAYWRIGHT_BROWSERS_PATH $XDG_CACHE_HOME/playwright/; \
+  else \
+    echo "...Copying Playwright Cache from Build Cache" && \
+    cp -R $XDG_CACHE_HOME/playwright/ $PLAYWRIGHT_BROWSERS_PATH; \
+  fi
 
 # 复制应用代码到容器
 COPY . /Signin_auto
