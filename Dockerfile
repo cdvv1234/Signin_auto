@@ -19,7 +19,8 @@ RUN apt-get update -q && \
         curl \
         gnupg \
         lsb-release \
-        npm  # 安装 npm
+        npm && \
+    rm -rf /var/lib/apt/lists/*  # 清理 apt 缓存以减小镜像
 
 # 设置工作目录
 WORKDIR /app
@@ -28,7 +29,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # 安装 Python 依赖
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # 安装 Playwright 和 Playwright 的浏览器
 RUN npm install playwright && \
@@ -51,12 +52,11 @@ RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
     cp -R $PLAYWRIGHT_BROWSERS_PATH $XDG_CACHE_HOME; \
     fi
 
-
 # 拷贝项目文件到容器中
 COPY . .
 
 # 设置环境变量
 ENV DISPLAY=:99
 
-# 启动应用
-CMD ["Xvfb", ":99", "-screen", "0", "1024x768x16", "&", "python3", "Signin_auto.py"]
+# 启动应用，使用 shell 脚本来同时启动 Xvfb 和 Python 应用
+CMD Xvfb :99 -screen 0 1024x768x16 & python3 Signin_auto.py
