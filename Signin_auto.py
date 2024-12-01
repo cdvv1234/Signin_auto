@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from playwright.sync_api import sync_playwright, TimeoutError
 from datetime import datetime
 import time
+import os
 
 app = Flask(__name__)
 
