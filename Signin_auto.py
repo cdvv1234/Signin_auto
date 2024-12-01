@@ -94,4 +94,7 @@ def punch():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     # 获取环境变量中的端口（如果没有指定端口，默认使用 5000）
+    port = int(os.environ.get('PORT', 5000))
+    # 绑定到 0.0.0.0 以允许外部访问
+    app.run(host='0.0.0.0', port=port, debug=True)
