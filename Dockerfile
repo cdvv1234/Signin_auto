@@ -19,7 +19,7 @@ RUN apt-get update -q && \
         curl \
         gnupg \
         lsb-release \
-        yarn  # 安装 yarn
+        npm  # 安装 npm
 
 # 设置工作目录
 WORKDIR /app
@@ -31,8 +31,8 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # 安装 Playwright 和 Playwright 的浏览器
-RUN yarn add playwright && \
-    yarn playwright install chromium
+RUN npm install playwright && \
+    npx playwright install chromium
 
 # 拷贝项目文件到容器中
 COPY . .
