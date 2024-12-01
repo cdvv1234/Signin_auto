@@ -34,6 +34,14 @@ RUN pip install -r requirements.txt
 RUN npm install playwright && \
     npx playwright install chromium
 
+# 设置环境变量
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright
+ENV XDG_CACHE_HOME=/opt/render/project/.cache
+
+# 打印调试信息
+RUN echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH"
+RUN echo "XDG_CACHE_HOME=$XDG_CACHE_HOME"
+
 # 处理 Playwright 缓存
 RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
     echo "...Copying Playwright Cache from Build Cache" && \
@@ -42,6 +50,7 @@ RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
     echo "...Storing Playwright Cache in Build Cache" && \
     cp -R $PLAYWRIGHT_BROWSERS_PATH $XDG_CACHE_HOME; \
     fi
+
 
 # 拷贝项目文件到容器中
 COPY . .
