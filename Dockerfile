@@ -43,8 +43,10 @@ ENV XDG_CACHE_HOME=/opt/render/project/.cache
 RUN echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH"
 RUN echo "XDG_CACHE_HOME=$XDG_CACHE_HOME"
 
-# 处理 Playwright 缓存
-RUN if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
+# 确保缓存路径存在并处理 Playwright 缓存
+RUN mkdir -p $PLAYWRIGHT_BROWSERS_PATH && \
+    mkdir -p $XDG_CACHE_HOME/playwright && \
+    if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ]; then \
     echo "...Copying Playwright Cache from Build Cache" && \
     cp -R $XDG_CACHE_HOME/playwright/ $PLAYWRIGHT_BROWSERS_PATH; \
     else \
